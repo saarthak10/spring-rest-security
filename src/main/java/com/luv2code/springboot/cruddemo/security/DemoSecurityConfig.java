@@ -12,36 +12,34 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class DemoSecurityConfig {
 
+    @Bean
     public InMemoryUserDetailsManager userDetailsManager() {
         UserDetails saarthak = User.builder()
                 .username("saarthak")
-                .password("test123")
+                .password("{noop}test123")
                 .roles("EMPLOYEE")
                 .build();
-
         UserDetails jack = User.builder()
                 .username("jack")
-                .password("test123")
+                .password("{noop}test1234")
                 .roles("EMPLOYEE", "MANAGER")
                 .build();
-
         UserDetails john = User.builder()
                 .username("john")
-                .password("test123")
+                .password("{noop}test1235")
                 .roles("EMPLOYEE", "MANAGER", "ADMIN")
                 .build();
-
         return new InMemoryUserDetailsManager(saarthak, jack, john);
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests(configurer ->
-                configurer.requestMatchers(HttpMethod.GET, "api/employees").hasRole("EMPLOYEE")
-                        .requestMatchers(HttpMethod.GET, "api/employees/**").hasRole("EMPLOYEE")
-                        .requestMatchers(HttpMethod.POST, "api/employees").hasRole("MANAGER")
-                        .requestMatchers(HttpMethod.POST, "api/employees/**").hasRole("MANAGER")
-                        .requestMatchers(HttpMethod.DELETE, "api/employees").hasRole("ADMIN")
+                configurer.requestMatchers(HttpMethod.GET, "/api/employees").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.GET, "/api/employees/**").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.POST, "/api/employees").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.POST, "/api/employees/**").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/employees").hasRole("ADMIN")
 
         );
 
